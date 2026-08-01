@@ -151,9 +151,9 @@ const assignDriver = async (req, res) => {
       return res.status(400).json({ error: "delivery not found" });
     }
 
-    if (toAssignDriver.status !== "pending") {
+    if (!["pending", "failed"].includes(toAssignDriver.status)) {
       return res.status(400).json({
-        error: "Driver already assigned",
+        error: "Cannot reassign — delivery already picked up",
       });
     } else {
       const { data: updatedDelivery, error: updateError } = await supabase
