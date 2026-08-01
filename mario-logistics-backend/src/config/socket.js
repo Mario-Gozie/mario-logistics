@@ -23,6 +23,9 @@ const initSocket = (server) => {
         "http://localhost:3001", // admin app
         "http://localhost:3002", // dispatcher app
         "http://localhost:3003", // driver app
+        "https://mario-logistics.vercel.app",
+        "https://mario-logistics-dispatcher.vercel.app",
+        "https://mario-logistics-driver.vercel.app",
       ],
       credentials: true, // allow auth headers and cookies
     },
