@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../lib/axios";
+import { io } from "socket.io-client";
 
 export default function MyDeliveries() {
   const [deliveries, setDeliveries] = useState([]);
@@ -23,6 +24,21 @@ export default function MyDeliveries() {
   };
   useEffect(() => {
     load();
+
+    // connect to backend for live updates
+    const token = localStorage.getItem("ml_token");
+    const socket = io(
+      import.meta.env.VITE_API_URL?.replace("/api", "") ||
+        "http://localhost:5000",
+      { auth: { token } },
+    );
+
+    // when a dispatcher assigns work or anything changes, reload the list
+    socket.on("delivery:updated", () => {
+      load();
+    });
+
+    return () => socket.disconnect();
   }, []);
 
   const updateStatus = async (delivery, newStatus) => {

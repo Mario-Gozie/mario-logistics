@@ -167,6 +167,8 @@ const assignDriver = async (req, res) => {
         return res.status(400).json({ error: "Failed to assign driver" });
       }
 
+      req.app.get("io").emit("delivery:updated", updatedDelivery);
+
       return res.status(200).json({ delivery: updatedDelivery });
     }
   } catch (error) {
@@ -263,8 +265,6 @@ const uploadProof = async (req, res) => {
       return res.status(400).json({ error: "No photo uploaded" });
     }
 
-    console.log("FILE RECEIVED:", req.file?.originalname, req.file?.mimetype);
-
     const fileExt = req.file.originalname.split(".").pop();
     const fileName = `${id}-${Date.now()}.${fileExt}`;
 
@@ -275,7 +275,6 @@ const uploadProof = async (req, res) => {
       });
 
     if (uploadError) {
-      console.log("STORAGE ERROR:", uploadError);
       return res.status(400).json({ error: "Failed to upload photo" });
     }
 
